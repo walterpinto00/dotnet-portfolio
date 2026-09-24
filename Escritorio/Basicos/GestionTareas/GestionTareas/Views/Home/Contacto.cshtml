@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Contacto";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#" method="post">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre completo</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="mensaje" class="form-label">Mensaje</label>
+                    <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+            </form>
+        </div>
+
+        <div class="col-md-6 mt-4 mt-md-0">
+            <h4>Información de contacto</h4>
+            <p>Si tienes problemas con la gestión de tus tareas, escríbenos o utiliza los siguientes canales:</p>
+            <ul class="list-unstyled">
+                <li><strong>Email:</strong> soporte@gestiontareas.com</li>
+                <li><strong>Teléfono:</strong> +57 300 000 0000</li>
+            </ul>
+        </div>
+    </div>
+</div>
