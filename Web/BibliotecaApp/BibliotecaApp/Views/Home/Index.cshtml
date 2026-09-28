@@ -1,0 +1,80 @@
+@model BibliotecaApp.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="px-4 py-5 my-5 text-center bg-light rounded-3">
+    <h1 class="display-4 fw-bold text-primary">📚 Dashboard Biblioteca</h1>
+    <p class="lead col-lg-8 mx-auto">
+        Resumen del estado actual del sistema.
+    </p>
+</div>
+
+<div class="row text-center mb-5">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3 shadow-sm">
+            <div class="card-header">Total de Libros</div>
+            <div class="card-body">
+                <h2 class="card-title">@Model.TotalLibros</h2>
+                <a asp-controller="Libros" asp-action="Index" class="text-white text-decoration-none">Ver todos</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3 shadow-sm">
+            <div class="card-header">Libros Prestados</div>
+            <div class="card-body">
+                <h2 class="card-title">@Model.LibrosPrestados</h2>
+                <a asp-controller="Prestamos" asp-action="Index" class="text-white text-decoration-none">Ver préstamos</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3 shadow-sm">
+            <div class="card-header">Autores Registrados</div>
+            <div class="card-body">
+                <h2 class="card-title">@Model.TotalAutores</h2>
+                <a asp-controller="Autores" asp-action="Index" class="text-white text-decoration-none">Ver autores</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-3">Últimos Préstamos</h3>
+@if (Model.UltimosPrestamos.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Fecha Préstamo</th>
+                <th>Fecha Devolución</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prestamo in Model.UltimosPrestamos)
+            {
+                <tr>
+                    <td>@prestamo.NombreUsuario</td>
+                    <td>@prestamo.TituloLibro</td>
+                    <td>@prestamo.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (prestamo.FechaDevolucion.HasValue)
+                        {
+                            <span class="badge bg-success">@prestamo.FechaDevolucion.Value.ToString("dd/MM/yyyy")</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Pendiente</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No hay préstamos recientes.</p>
+}

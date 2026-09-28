@@ -1,0 +1,48 @@
+@model IEnumerable<BibliotecaApp.ViewModels.AutorIndexViewModel>
+
+@{
+    ViewData["Title"] = "Autores";
+}
+
+<h2>Lista de Autores</h2>
+
+<p>
+    <form asp-action="Index" method="get" class="d-flex gap-2">
+        <input type="text" name="buscar" value="@ViewBag.Buscar" 
+               placeholder="Buscar por nombre..." class="form-control" style="max-width: 300px;" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
+    </form>
+</p>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Nacionalidad</th>
+            <th>Fecha Nacimiento</th>
+            <th>Total Libros</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var autor in Model)
+        {
+            <tr>
+                <td>@autor.Nombre</td>
+                <td>@autor.Nacionalidad</td>
+                <td>@autor.FechaNacimiento?.ToString("dd/MM/yyyy")</td>
+                <td><span class="badge bg-info">@autor.TotalLibros</span></td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@autor.Id" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Edit" asp-route-id="@autor.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@autor.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

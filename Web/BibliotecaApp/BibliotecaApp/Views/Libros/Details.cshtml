@@ -1,0 +1,31 @@
+@model BibliotecaApp.ViewModels.LibroDetalleViewModel
+
+@{
+    ViewData["Title"] = "Detalles del Libro";
+}
+
+<h1>Detalles del Libro</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Titulo)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Titulo)</dd>
+        
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ISBN)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.ISBN)</dd>
+        
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.AnioPublicacion)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.AnioPublicacion)</dd>
+        
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.NombreAutor)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.NombreAutor)</dd>
+        
+        <dt class="col-sm-2">Préstamos Registrados</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.NumeroPrestamos)</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>

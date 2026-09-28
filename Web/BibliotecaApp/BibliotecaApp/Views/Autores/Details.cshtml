@@ -1,0 +1,57 @@
+@model BibliotecaApp.ViewModels.AutorDetalleViewModel
+
+@{
+    ViewData["Title"] = "Detalles del Autor";
+}
+
+<h2>Detalles de @Model.Nombre</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">@Model.Nombre</dd>
+
+        <dt class="col-sm-3">Nacionalidad</dt>
+        <dd class="col-sm-9">@Model.Nacionalidad</dd>
+
+        <dt class="col-sm-3">Fecha de Nacimiento</dt>
+        <dd class="col-sm-9">
+            @if (Model.FechaNacimiento.HasValue)
+            {
+                @Model.FechaNacimiento.Value.ToString("dd/MM/yyyy")
+            }
+            else
+            {
+                <span class="text-muted">No registrada</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Total de Libros</dt>
+        <dd class="col-sm-9">
+            <span class="badge bg-info fs-6">@Model.TotalLibros</span>
+        </dd>
+
+        <dt class="col-sm-3">Libros</dt>
+        <dd class="col-sm-9">
+            @if (Model.TitulosLibros.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var titulo in Model.TitulosLibros)
+                    {
+                        <li>📖 @titulo</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">No tiene libros registrados</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>

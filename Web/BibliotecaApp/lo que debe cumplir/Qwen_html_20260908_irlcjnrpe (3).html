@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details de Autor - Arquitectura en Capas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #5a67d8;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .intro-box {
+            background: #f7fafc;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .file-path {
+            background: #edf2f7;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #4a5568;
+            margin: 10px 0;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .step {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .warning {
+            background: #fffaf0;
+            border-left: 5px solid #ed8936;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .tip {
+            background: #ebf8ff;
+            border-left: 5px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .folder-structure {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px 0;
+            line-height: 1.9;
+            font-size: 0.95em;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .folder-structure .folder {
+            color: #fbd38d;
+            font-weight: bold;
+        }
+
+        .folder-structure .file {
+            color: #90cdf4;
+        }
+
+        .folder-structure .new {
+            color: #68d391;
+            font-weight: bold;
+        }
+
+        .folder-structure .modify {
+            color: #f6ad55;
+            font-weight: bold;
+        }
+
+        .folder-structure .unchanged {
+            color: #a0aec0;
+        }
+
+        .folder-structure .comment {
+            color: #718096;
+            font-style: italic;
+        }
+
+        .keyword { color: #c792ea; }
+        .string { color: #c3e88d; }
+        .comment-code { color: #676e95; font-style: italic; }
+        .type { color: #82aaff; }
+        .method { color: #82aaff; }
+
+        .test-box {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .test-box h3 {
+            color: #2c7a7b;
+            margin-top: 0;
+        }
+
+        .test-box ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .test-box li {
+            padding: 5px 0;
+        }
+
+        .benefits {
+            background: #f0fff4;
+            border-left: 5px solid #48bb78;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .benefits ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .benefits li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .benefits li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .analogy {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+            border-left: 5px solid #f39c12;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .analogy h3 {
+            color: #d68910;
+            margin-top: 0;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-box {
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .comparison-box.before {
+            background: #fed7d7;
+            border: 2px solid #f56565;
+        }
+
+        .comparison-box.after {
+            background: #c6f6d5;
+            border: 2px solid #48bb78;
+        }
+
+        .comparison-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .comparison-box.before h4 {
+            color: #c53030;
+        }
+
+        .comparison-box.after h4 {
+            color: #276749;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Details de Autor</h1>
+        <p class="subtitle">Arquitectura en Capas con Services + ViewModels</p>
+
+        <div class="analogy">
+            <h3>🧠 Explicación simple para tus aprendices</h3>
+            <p>El <strong>Index</strong> muestra una lista de muchos autores con datos resumidos.</p>
+            <p>El <strong>Details</strong> muestra la información completa de <strong>UN solo autor</strong>, incluyendo sus libros.</p>
+            <p>Es como la diferencia entre ver la <strong>portada de un libro</strong> (Index) y <strong>abrir el libro y leerlo</strong> (Details).</p>
+            <p>Por eso necesitamos un ViewModel diferente: el del Index solo necesita 5 campos. El del Details necesita más información (como la lista de títulos de sus libros).</p>
+        </div>
+
+        <h2>📁 Estructura del Proyecto (solo lo que cambia)</h2>
+        
+        <div class="folder-structure"><span class="folder">BibliotecaApp/</span>
+│
+├── 📁 <span class="folder">Controllers/</span>
+│   └── 📄 <span class="file modify">AutorController.cs</span>          <span class="comment">← MODIFICAR (solo el método Details)</span>
+│
+├── 📁 <span class="folder">Services/</span>
+│   ├── 📄 <span class="file modify">IAutorService.cs</span>            <span class="comment">← MODIFICAR (agregar 1 línea)</span>
+│   └── 📄 <span class="file modify">AutorService.cs</span>             <span class="comment">← MODIFICAR (agregar 1 método)</span>
+│
+├── 📁 <span class="folder">ViewModels/</span>
+│   ├── 📄 <span class="file unchanged">AutorIndexViewModel.cs</span>      <span class="comment">← SIN CAMBIOS (del paso anterior)</span>
+│   └── 📄 <span class="file new">AutorDetalleViewModel.cs</span>    <span class="comment">← CREAR (nuevo)</span>
+│
+├── 📁 <span class="folder">Views/</span>
+│   └── 📁 <span class="folder">Autor/</span>
+│       ├── 📄 <span class="file unchanged">Index.cshtml</span>            <span class="comment">← SIN CAMBIOS (del paso anterior)</span>
+│       └── 📄 <span class="file modify">Details.cshtml</span>          <span class="comment">← MODIFICAR</span></div>
+
+        <h2>🔨 Implementación Paso a Paso</h2>
+
+        <!-- PASO 1: VIEWMODEL -->
+        <div class="step">
+            <h3><span class="step-number">1</span> Crear el ViewModel para Details</h3>
+            <div class="file-path">ViewModels/AutorDetalleViewModel.cs</div>
+            <p><strong>¿Dónde?</strong> Clic derecho sobre la carpeta <code>ViewModels</code> → <strong>Agregar</strong> → <strong>Clase</strong> → nombrar <code>AutorDetalleViewModel.cs</code></p>
+            <pre><code><span class="keyword">namespace</span> BibliotecaApp.ViewModels
+{
+    <span class="keyword">public class</span> <span class="type">AutorDetalleViewModel</span>
+    {
+        <span class="keyword">public int</span> Id { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+        <span class="keyword">public string</span> Nombre { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+        <span class="keyword">public string</span> Nacionalidad { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+        <span class="keyword">public</span> DateTime? FechaNacimiento { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+        <span class="keyword">public int</span> TotalLibros { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+        <span class="keyword">public</span> List&lt;<span class="keyword">string</span>&gt; TitulosLibros { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">new</span> List&lt;<span class="keyword">string</span>&gt;();
+    }
+}</code></pre>
+            
+            <div class="tip">
+                <strong>💡 ¿Por qué un ViewModel diferente al del Index?</strong>
+                <p style="margin-top: 10px;">Porque el Index y el Details <strong>muestran cosas diferentes</strong>:</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Index (lista)</th>
+                        <th>Details (uno solo)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Id</td>
+                        <td>✅ Sí</td>
+                        <td>✅ Sí</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre</td>
+                        <td>✅ Sí</td>
+                        <td>✅ Sí</td>
+                    </tr>
+                    <tr>
+                        <td>Nacionalidad</td>
+                        <td>✅ Sí</td>
+                        <td>✅ Sí</td>
+                    </tr>
+                    <tr>
+                        <td>FechaNacimiento</td>
+                        <td>✅ Sí</td>
+                        <td>✅ Sí</td>
+                    </tr>
+                    <tr>
+                        <td>TotalLibros</td>
+                        <td>✅ Sí</td>
+                        <td>✅ Sí</td>
+                    </tr>
+                    <tr>
+                        <td>TitulosLibros</td>
+                        <td>❌ No (sería mucho dato para una tabla)</td>
+                        <td>✅ Sí (aquí sí tiene sentido mostrarlos)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>El Index es como ver las filas de una tabla: solo lo esencial.<br>
+            El Details es como abrir la ficha completa: todo el detalle.</p>
+
+            <div class="tip">
+                <strong>💡 ¿Por qué <code>List&lt;string&gt;</code> y no <code>List&lt;Libro&gt;</code>?</strong>
+                <p style="margin-top: 10px;">Porque la vista solo necesita mostrar los <strong>títulos</strong> de los libros. No necesita el ISBN, el año, el autor, etc. Pasar solo strings es más seguro y más ligero. El ViewModel le da a la vista <strong>exactamente lo que necesita</strong>, ni más ni menos.</p>
+            </div>
+        </div>
+
+        <!-- PASO 2: INTERFAZ -->
+        <div class="step">
+            <h3><span class="step-number">2</span> Agregar el método a la Interfaz del Servicio</h3>
+            <div class="file-path">Services/IAutorService.cs</div>
+            <p><strong>¿Dónde?</strong> Abrir <code>Services/IAutorService.cs</code> y <strong>agregar UNA línea</strong> (no borrar lo que ya existe).</p>
+            <pre><code><span class="keyword">using</span> BibliotecaApp.ViewModels;
+
+<span class="keyword">namespace</span> BibliotecaApp.Services
+{
+    <span class="keyword">public interface</span> <span class="type">IAutorService</span>
+    {
+        Task&lt;IEnumerable&lt;AutorIndexViewModel&gt;&gt; <span class="method">ObtenerTodosAsync</span>(<span class="keyword">string</span>? buscar);
+        
+        <span class="comment-code">// ✅ AGREGAR ESTA LÍNEA:</span>
+        Task&lt;AutorDetalleViewModel?&gt; <span class="method">ObtenerDetalleAsync</span>(<span class="keyword">int</span> id);
+    }
+}</code></pre>
+            
+            <div class="tip">
+                <strong>💡 ¿Por qué?</strong> La interfaz es el <strong>contrato</strong>. Antes solo decía: <em>"Sé buscar todos los autores"</em>. Ahora también dice: <em>"Sé buscar UN autor por su id y devolverlo como detalle"</em>.
+            </div>
+
+            <div class="tip">
+                <strong>💡 ¿Por qué devuelve <code>AutorDetalleViewModel?</code> con el signo <code>?</code>?</strong>
+                <p style="margin-top: 10px;">Porque si le pides un autor con un id que no existe (por ejemplo, id = 999), no hay nada que devolver. El <code>?</code> significa que puede devolver <code>null</code>. El controlador se encargará de convertir ese <code>null</code> en un error 404 (página no encontrada).</p>
+            </div>
+        </div>
+
+        <!-- PASO 3: SERVICIO -->
+        <div class="step">
+            <h3><span class="step-number">3</span> Implementar el método en el Servicio</h3>
+            <div class="file-path">Services/AutorService.cs</div>
+            <p><strong>¿Dónde?</strong> Abrir <code>Services/AutorService.cs</code> y <strong>agregar este método al final</strong> (no borrar el método <code>ObtenerTodosAsync</code> que ya existe).</p>
+            <pre><code><span class="comment-code">// ✅ AGREGAR ESTE MÉTODO NUEVO (dentro de la clase AutorService):</span>
+<span class="keyword">public async</span> Task&lt;AutorDetalleViewModel?&gt; <span class="method">ObtenerDetalleAsync</span>(<span class="keyword">int</span> id)
+{
+    <span class="keyword">var</span> autor = <span class="keyword">await</span> _context.Autores
+        .Include(a =&gt; a.Libros)
+        .FirstOrDefaultAsync(a =&gt; a.Id == id);
+
+    <span class="keyword">if</span> (autor == <span class="keyword">null</span>)
+    {
+        <span class="keyword">return null</span>;
+    }
+
+    <span class="keyword">return new</span> AutorDetalleViewModel
+    {
+        Id = autor.Id,
+        Nombre = autor.Nombre,
+        Nacionalidad = autor.Nacionalidad,
+        FechaNacimiento = autor.FechaNacimiento,
+        TotalLibros = autor.Libros.Count,
+        TitulosLibros = autor.Libros.Select(l =&gt; l.Titulo).ToList()
+    };
+}</code></pre>
+            
+            <div class="tip">
+                <strong>💡 ¿Qué hace este método, línea por línea?</strong>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong><code>_context.Autores</code></strong> → Va a la tabla de autores en la base de datos.</li>
+                    <li><strong><code>.Include(a => a.Libros)</code></strong> → También trae los libros de ese autor (sin esto, la lista de libros vendría vacía).</li>
+                    <li><strong><code>.FirstOrDefaultAsync(a => a.Id == id)</code></strong> → Busca el primer autor que coincida con el id. Si no encuentra ninguno, devuelve <code>null</code>.</li>
+                    <li><strong><code>if (autor == null) return null;</code></strong> → Si no existe, salimos temprano. No hay nada que hacer.</li>
+                    <li><strong><code>return new AutorDetalleViewModel { ... }</code></strong> → Creamos el ViewModel y copiamos los datos del modelo al ViewModel. Esto se llama <strong>mapeo manual</strong>.</li>
+                    <li><strong><code>TotalLibros = autor.Libros.Count</code></strong> → Contamos cuántos libros tiene. Es un dato calculado, no una columna de la base de datos.</li>
+                    <li><strong><code>TitulosLibros = autor.Libros.Select(l => l.Titulo).ToList()</code></strong> → De todos los libros, extraemos solo el título de cada uno y lo convertimos en una lista de strings.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- PASO 4: CONTROLADOR -->
+        <div class="step">
+            <h3><span class="step-number">4</span> Modificar el método Details del Controlador</h3>
+            <div class="file-path">Controllers/AutorController.cs</div>
+            <p><strong>¿Dónde?</strong> Abrir <code>Controllers/AutorController.cs</code> y <strong>reemplazar SOLO el método Details</strong> (los demás métodos NO se tocan).</p>
+            
+            <div class="comparison-table">
+                <div class="comparison-box before">
+                    <h4>❌ BORRAR ESTO (el método Details viejo)</h4>
+                    <pre style="margin: 0; font-size: 0.85em;"><code><span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Details</span>(<span class="keyword">int</span>? id)
+{
+    <span class="keyword">if</span> (id == <span class="keyword">null</span>) <span class="keyword">return</span> NotFound();
+
+    <span class="keyword">var</span> autor = <span class="keyword">await</span> _context.Autores
+        .Include(a =&gt; a.Libros)
+        .FirstOrDefaultAsync(m =&gt; m.Id == id);
+
+    <span class="keyword">if</span> (autor == <span class="keyword">null</span>) <span class="keyword">return</span> NotFound();
+
+    <span class="keyword">return</span> View(autor);
+}</code></pre>
+                </div>
+                <div class="comparison-box after">
+                    <h4>✅ REEMPLAZAR CON ESTO (el nuevo)</h4>
+                    <pre style="margin: 0; font-size: 0.85em;"><code><span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Details</span>(<span class="keyword">int</span>? id)
+{
+    <span class="keyword">if</span> (id == <span class="keyword">null</span>)
+    {
+        <span class="keyword">return</span> NotFound();
+    }
+
+    <span class="keyword">var</span> detalle = <span class="keyword">await</span> _autorService
+        .ObtenerDetalleAsync(id.Value);
+
+    <span class="keyword">if</span> (detalle == <span class="keyword">null</span>)
+    {
+        <span class="keyword">return</span> NotFound();
+    }
+
+    <span class="keyword">return</span> View(detalle);
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="tip">
+                <strong>💡 ¿Qué cambió?</strong>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Antes</th>
+                        <th>Ahora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Usaba <code>_context</code> directamente</td>
+                        <td>Usa <code>_autorService</code></td>
+                    </tr>
+                    <tr>
+                        <td>Hacía la consulta con <code>.Include().FirstOrDefaultAsync()</code></td>
+                        <td>Llama a <code>.ObtenerDetalleAsync()</code></td>
+                    </tr>
+                    <tr>
+                        <td>Devolvía <code>View(autor)</code> (modelo de dominio)</td>
+                        <td>Devuelve <code>View(detalle)</code> (ViewModel)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip">
+                <strong>💡 ¿Por qué <code>id.Value</code>?</strong>
+                <p style="margin-top: 10px;">Porque el parámetro <code>id</code> es <code>int?</code> (nullable, puede ser nulo). Pero en la línea de arriba ya verificamos que no es nulo (<code>if (id == null) return NotFound()</code>). Así que cuando llegamos a <code>_autorService.ObtenerDetalleAsync(id.Value)</code>, sabemos con certeza que <code>id</code> tiene un valor. El <code>.Value</code> extrae ese valor del nullable.</p>
+            </div>
+        </div>
+
+        <!-- PASO 5: VISTA -->
+        <div class="step">
+            <h3><span class="step-number">5</span> Modificar la Vista Details</h3>
+            <div class="file-path">Views/Autor/Details.cshtml</div>
+            <p><strong>¿Dónde?</strong> Abrir <code>Views/Autor/Details.cshtml</code> y <strong>reemplazar todo su contenido</strong>.</p>
+            <pre><code>@model BibliotecaApp.ViewModels.AutorDetalleViewModel
+
+@{
+    ViewData["Title"] = "Detalles del Autor";
+}
+
+&lt;h2&gt;Detalles de @Model.Nombre&lt;/h2&gt;
+
+&lt;div&gt;
+    &lt;hr /&gt;
+    &lt;dl class="row"&gt;
+        &lt;dt class="col-sm-3"&gt;Nombre&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Nombre&lt;/dd&gt;
+
+        &lt;dt class="col-sm-3"&gt;Nacionalidad&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Nacionalidad&lt;/dd&gt;
+
+        &lt;dt class="col-sm-3"&gt;Fecha de Nacimiento&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;
+            @if (Model.FechaNacimiento.HasValue)
+            {
+                @Model.FechaNacimiento.Value.ToString("dd/MM/yyyy")
+            }
+            else
+            {
+                &lt;span class="text-muted"&gt;No registrada&lt;/span&gt;
+            }
+        &lt;/dd&gt;
+
+        &lt;dt class="col-sm-3"&gt;Total de Libros&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;
+            &lt;span class="badge bg-info fs-6"&gt;@Model.TotalLibros&lt;/span&gt;
+        &lt;/dd&gt;
+
+        &lt;dt class="col-sm-3"&gt;Libros&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;
+            @if (Model.TitulosLibros.Any())
+            {
+                &lt;ul class="list-unstyled"&gt;
+                    @foreach (var titulo in Model.TitulosLibros)
+                    {
+                        &lt;li&gt;📖 @titulo&lt;/li&gt;
+                    }
+                &lt;/ul&gt;
+            }
+            else
+            {
+                &lt;span class="text-muted"&gt;No tiene libros registrados&lt;/span&gt;
+            }
+        &lt;/dd&gt;
+    &lt;/dl&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"&gt;Editar&lt;/a&gt;
+    &lt;a asp-action="Index" class="btn btn-secondary"&gt;Volver a la lista&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+            
+            <div class="tip">
+                <strong>💡 ¿Qué cambió en la vista?</strong>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Antes</th>
+                        <th>Ahora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@model BibliotecaApp.Models.Autor</code></td>
+                        <td><code>@model BibliotecaApp.ViewModels.AutorDetalleViewModel</code></td>
+                    </tr>
+                    <tr>
+                        <td>Mostraba <code>Model.Libros</code> (objetos completos)</td>
+                        <td>Muestra <code>Model.TitulosLibros</code> (solo strings)</td>
+                    </tr>
+                    <tr>
+                        <td>No mostraba total de libros</td>
+                        <td>Muestra <code>Model.TotalLibros</code> como badge</td>
+                    </tr>
+                    <tr>
+                        <td>Lista de libros con propiedades complejas</td>
+                        <td>Lista simple de títulos con un emoji 📖</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>✅ Resumen de lo que hicimos</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Archivo</th>
+                    <th>Acción</th>
+                    <th>¿Qué hicimos?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>ViewModels/AutorDetalleViewModel.cs</code></td>
+                    <td><span style="color: #48bb78; font-weight: bold;">✅ CREAR</span></td>
+                    <td>ViewModel con 6 campos para mostrar el detalle completo</td>
+                </tr>
+                <tr>
+                    <td><code>Services/IAutorService.cs</code></td>
+                    <td><span style="color: #ed8936; font-weight: bold;">🔄 MODIFICAR</span></td>
+                    <td>Agregar la línea <code>ObtenerDetalleAsync(int id)</code></td>
+                </tr>
+                <tr>
+                    <td><code>Services/AutorService.cs</code></td>
+                    <td><span style="color: #ed8936; font-weight: bold;">🔄 MODIFICAR</span></td>
+                    <td>Agregar el método que busca, mapea y devuelve el ViewModel</td>
+                </tr>
+                <tr>
+                    <td><code>Controllers/AutorController.cs</code></td>
+                    <td><span style="color: #ed8936; font-weight: bold;">🔄 MODIFICAR</span></td>
+                    <td>Reemplazar solo el método Details para usar el servicio</td>
+                </tr>
+                <tr>
+                    <td><code>Views/Autor/Details.cshtml</code></td>
+                    <td><span style="color: #ed8936; font-weight: bold;">🔄 MODIFICAR</span></td>
+                    <td>Cambiar el <code>@model</code> y mostrar los datos del ViewModel</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🧪 Prueba</h2>
+
+        <div class="test-box">
+            <h3>🚀 Pasos para probar</h3>
+            <ol>
+                <li>Compila el proyecto (<kbd>F6</kbd>)</li>
+                <li>Ejecuta (<kbd>F5</kbd>)</li>
+                <li>Ve a <code>/Autor</code></li>
+                <li>Haz clic en <strong>"Detalles"</strong> de cualquier autor</li>
+                <li>Deberías ver:
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>El <strong>nombre</strong> del autor</li>
+                        <li>La <strong>nacionalidad</strong></li>
+                        <li>La <strong>fecha de nacimiento</strong> (o "No registrada" si está vacía)</li>
+                        <li>El <strong>total de libros</strong> como un badge azul</li>
+                        <li>La <strong>lista de títulos</strong> de sus libros con el emoji 📖 (o "No tiene libros registrados")</li>
+                    </ul>
+                </li>
+                <li>Haz clic en <strong>"Volver a la lista"</strong> para confirmar que el Index sigue funcionando</li>
+            </ol>
+        </div>
+
+        <h2>🎯 ¿Qué aprendieron tus aprendices?</h2>
+
+        <div class="benefits">
+            <ul>
+                <li><strong>Cada vista tiene su propio ViewModel</strong> → El Index usa <code>AutorIndexViewModel</code>, el Details usa <code>AutorDetalleViewModel</code>. Son diferentes porque muestran cosas diferentes.</li>
+                <li><strong>El servicio hace el trabajo pesado</strong> → Busca en la base de datos, calcula datos (<code>TotalLibros</code>), y arma el ViewModel. El controlador solo llama y devuelve.</li>
+                <li><strong>El ViewModel le da a la vista solo lo que necesita</strong> → <code>TitulosLibros</code> es una lista de strings, no de objetos completos. Menos datos = más seguridad y mejor rendimiento.</li>
+                <li><strong>El <code>null</code> se maneja en dos niveles</strong> → El servicio devuelve <code>null</code> si no encuentra el autor. El controlador convierte ese <code>null</code> en un error 404.</li>
+                <li><strong>El mismo patrón se repite</strong> → Index y Details usan exactamente el mismo patrón: ViewModel → Interfaz → Servicio → Controlador → Vista.</li>
+            </ul>
+        </div>
+
+        <div class="intro-box">
+            <h3>🚀 Próximos Pasos</h3>
+            <p>Cuando el Details funcione correctamente, podemos continuar con:</p>
+            <ol style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>Create de Autor</strong> con ViewModel</li>
+                <li><strong>Edit de Autor</strong> con ViewModel</li>
+                <li><strong>Delete de Autor</strong> con ViewModel</li>
+                <li>Eliminar el <code>_context</code> temporal del controlador</li>
+            </ol>
+            <p style="margin-top: 15px;"><strong>¡Confírmame cuando todo funcione y continuamos!</strong></p>
+        </div>
+    </div>
+</body>
+</html>

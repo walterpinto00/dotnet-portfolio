@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Interactiva - BibliotecaApp</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #e2e8f0;
+            --card-bg: #ffffff;
+            --code-bg: #1e293b;
+            --code-text: #f8fafc;
+            --accent-color: #f59e0b;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --sidebar-bg: #1e293b;
+            --sidebar-border: #334155;
+            --card-bg: #1e293b;
+            --code-bg: #000000;
+            --code-text: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+            max-width: 1000px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        h1 { font-size: 2.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+        h2 { font-size: 2rem; border-bottom: 1px solid var(--sidebar-border); padding-bottom: 5px; }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .theme-toggle:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--sidebar-border);
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            font-family: Consolas, Monaco, 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+        
+        code {
+            font-family: Consolas, Monaco, 'Courier New', Courier, monospace;
+            background-color: rgba(128, 128, 128, 0.2);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+        }
+
+        th, td {
+            border: 1px solid var(--sidebar-border);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Highlight */
+        .highlight {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+            background-color: rgba(245, 158, 11, 0.1);
+            margin: 20px 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* Flowchart (CSS based) */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .flow-box {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            width: 250px;
+        }
+        .flow-arrow {
+            font-size: 24px;
+            margin: 10px 0;
+            color: var(--text-color);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--sidebar-border);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 Cambiar Modo</button>
+
+    <aside class="sidebar">
+        <h2>📚 BibliotecaApp</h2>
+        <ul>
+            <li><a href="#introduccion">1. Introducción al proyecto</a></li>
+            <li><a href="#tecnologias">2. Tecnologías utilizadas</a></li>
+            <li><a href="#estructura">3. Estructura de carpetas</a></li>
+            <li><a href="#archivos">4. Explicación de archivos</a></li>
+            <li><a href="#flujo-completo">5. Flujo completo</a></li>
+            <li><a href="#codigo">6. Explicación del código</a></li>
+            <li><a href="#base-datos">7. Base de datos</a></li>
+            <li><a href="#api-comunicacion">8. HTTP y Comunicación</a></li>
+            <li><a href="#flujo-real">9. Flujo de una acción real</a></li>
+            <li><a href="#errores">10. Errores y problemas</a></li>
+            <li><a href="#instalacion">11. Instalación y ejecución</a></li>
+            <li><a href="#conceptos">12. Conceptos a aprender</a></li>
+            <li><a href="#glosario">13. Glosario</a></li>
+            <li><a href="#resumen">14. Resumen final</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        
+        <section id="introduccion">
+            <h1>1. Introducción al proyecto</h1>
+            <p><strong>¿Qué es este proyecto?</strong><br>
+            Este proyecto, llamado <strong>BibliotecaApp</strong>, es una aplicación web diseñada para gestionar una biblioteca. Permite a los usuarios administrar libros, autores y los préstamos que se realizan.</p>
+            
+            <p><strong>¿Cuál es su objetivo y qué problema soluciona?</strong><br>
+            Su objetivo principal es reemplazar los registros manuales (en papel o Excel) de una biblioteca por un sistema automatizado. Resuelve el problema del desorden y la pérdida de información: ahora se puede saber exactamente qué libros hay, quién los escribió y si están prestados o disponibles.</p>
+            
+            <p><strong>¿Qué puede hacer?</strong><br>
+            El sistema permite crear, leer, actualizar y eliminar (operaciones conocidas como <strong>CRUD</strong>) la información de: Autores, Libros y Préstamos. Además, cuenta con un panel principal (Dashboard) que muestra estadísticas resumidas.</p>
+            
+            <div class="highlight">
+                <strong>En términos sencillos:</strong> Es una página web a la que entras y ves botones para agregar libros nuevos, registrar a los autores de esos libros, y anotar a qué persona se le prestó un libro en específico. Todo esto se guarda de forma segura en una base de datos.
+            </div>
+        </section>
+
+        <section id="tecnologias">
+            <h1>2. Tecnologías utilizadas</h1>
+            <p>Este proyecto está construido con un conjunto de herramientas muy populares en el mundo del desarrollo web profesional.</p>
+            
+            <div class="card">
+                <h3><span class="tag">C# (C Sharp)</span></h3>
+                <p><strong>¿Qué es?</strong> Un lenguaje de programación creado por Microsoft.<br>
+                <strong>¿Para qué sirve?</strong> Es el cerebro del proyecto. Con C# se escriben las reglas lógicas: qué sucede cuando el usuario hace clic en "Guardar", cómo se calcula la fecha de devolución, etc.<br>
+                <strong>Ejemplo:</strong> <code>public string Titulo { get; set; }</code> (Una línea de C# que dice que los libros tendrán un Título).</p>
+            </div>
+
+            <div class="card">
+                <h3><span class="tag">ASP.NET Core MVC</span></h3>
+                <p><strong>¿Qué es?</strong> Un "Framework" (un marco de trabajo) para C#. Es como una plantilla gigante que ya trae muchas herramientas prefabricadas para hacer páginas web.<br>
+                <strong>¿Para qué sirve?</strong> Organiza el proyecto en tres partes: Modelos (Datos), Vistas (Pantallas) y Controladores (Intermediarios). Por eso se llama "MVC".</p>
+            </div>
+
+            <div class="card">
+                <h3><span class="tag">Entity Framework Core (EF Core)</span></h3>
+                <p><strong>¿Qué es?</strong> Un "ORM" (Mapeador Objeto-Relacional).<br>
+                <strong>¿Para qué sirve?</strong> Es un traductor. C# habla en "objetos" y las bases de datos hablan en "tablas y SQL". EF Core se encarga de traducir automáticamente entre ambos. Así, no tienes que escribir código SQL complejo manualmente.</p>
+            </div>
+
+            <div class="card">
+                <h3><span class="tag">SQL Server (LocalDB)</span></h3>
+                <p><strong>¿Qué es?</strong> El sistema de Base de Datos.<br>
+                <strong>¿Para qué sirve?</strong> Es un almacén digital donde se guarda toda la información (los nombres de los libros, los autores) para que no se borre cuando se apaga el computador.</p>
+            </div>
+
+            <div class="card">
+                <h3><span class="tag">HTML, CSS y Razor</span></h3>
+                <p><strong>¿Qué son?</strong> Los lenguajes para diseñar la cara del sitio web.<br>
+                <strong>HTML</strong> crea los textos y botones. <strong>CSS</strong> les da color y forma. <strong>Razor</strong> (archivos .cshtml) permite mezclar HTML con C#, para por ejemplo, mostrar una lista de libros directamente desde la base de datos a la pantalla.</p>
+            </div>
+        </section>
+
+        <section id="estructura">
+            <h1>3. Estructura de carpetas</h1>
+            <p>Los proyectos profesionales tienen un orden estricto. Así está organizado este proyecto:</p>
+            
+            <pre>
+BibliotecaApp/
+│
+├── Controllers/     ← Intermediarios (Los meseros del restaurante)
+├── Models/          ← Definición de datos (Los ingredientes)
+├── Views/           ← Lo que ve el usuario (La presentación del plato)
+├── ViewModels/      ← Datos empaquetados específicamente para las Vistas
+├── Services/        ← La lógica de negocio (Los cocineros)
+├── Data/            ← Conexión a la base de datos (La bodega)
+├── wwwroot/         ← Archivos públicos (Imágenes, CSS, JS)
+├── Program.cs       ← El punto de inicio de toda la aplicación
+└── appsettings.json ← Configuraciones (Como contraseñas de la base de datos)
+            </pre>
+
+            <p><strong>¿Por qué esta organización?</strong><br>
+            Se llama <strong>Arquitectura de Software</strong>. Separa las responsabilidades. Si quieres cambiar el color de un botón, vas a <code>Views</code>. Si quieres cambiar cómo se guarda un libro, vas a <code>Services</code>. Si todos estuviera en un solo archivo, sería imposible de entender o mantener.</p>
+        </section>
+
+        <section id="archivos">
+            <h1>4. Explicación archivo por archivo</h1>
+            <p>Vamos a analizar los archivos más importantes que hacen que esta aplicación funcione.</p>
+
+            <div class="card">
+                <h3>📁 Program.cs</h3>
+                <p><strong>Función:</strong> Es el corazón y punto de partida de la aplicación. Cuando ejecutas el proyecto, este es el primer archivo que lee el computador.</p>
+                <p><strong>Qué contiene:</strong> Contiene la configuración inicial. Aquí se le dice al sistema: "Vamos a usar una base de datos", "Vamos a usar el patrón MVC", y se registran los "Servicios" (Inyección de dependencias).</p>
+                <p><strong>Código clave:</strong><br>
+                <code>builder.Services.AddDbContext&lt;ApplicationDbContext&gt;(...)</code> (Conecta la base de datos).<br>
+                <code>builder.Services.AddScoped&lt;ILibroService, LibroService&gt;();</code> (Enseña a la aplicación dónde está la lógica de los libros).</p>
+            </div>
+
+            <div class="card">
+                <h3>📁 Data / ApplicationDbContext.cs</h3>
+                <p><strong>Función:</strong> Es el puente de comunicación directo entre tu código de C# y tu base de datos SQL.</p>
+                <p><strong>Qué contiene:</strong> Define las "tablas" que existirán en la base de datos usando algo llamado <code>DbSet</code>. También configura cómo se relacionan las tablas entre sí.</p>
+                <p><strong>Código clave:</strong><br>
+                <code>public DbSet&lt;Libro&gt; Libros { get; set; }</code><br>
+                Esto le dice a la base de datos: "Crea una tabla llamada Libros, y ponle columnas según lo que diga el archivo Libro.cs".</p>
+            </div>
+
+            <div class="card">
+                <h3>📁 Models / Libro.cs</h3>
+                <p><strong>Función:</strong> Define qué es un "Libro" en el sistema.</p>
+                <p><strong>Qué contiene:</strong> Propiedades simples como <code>Id</code>, <code>Titulo</code>, <code>ISBN</code> y <code>AnioPublicacion</code>. También contiene las relaciones: Un libro pertenece a un Autor, y un libro puede tener muchos Préstamos.</p>
+                <p><strong>Con qué se relaciona:</strong> Este archivo es usado por la base de datos para crear las columnas, y por los servicios para guardar información.</p>
+            </div>
+
+            <div class="card">
+                <h3>📁 Services / LibroService.cs</h3>
+                <p><strong>Función:</strong> Contiene la "Lógica de Negocio". Es el cerebro de las operaciones de los libros.</p>
+                <p><strong>Qué contiene:</strong> Funciones complejas como <code>ObtenerTodosAsync</code> o <code>CrearLibroAsync</code>. Si alguien quiere buscar los libros que están "Prestados", la búsqueda se hace aquí, no en la vista.</p>
+                <p><strong>Cómo funciona:</strong> Recibe la base de datos (ApplicationDbContext), busca la información, la filtra, la organiza y se la entrega al controlador lista para usar.</p>
+            </div>
+
+            <div class="card">
+                <h3>📁 Controllers / LibrosController.cs</h3>
+                <p><strong>Función:</strong> Es el director de tráfico. Atiende las peticiones del usuario que llegan desde el navegador web.</p>
+                <p><strong>Cómo funciona:</strong> Cuando el usuario entra a <code>www.tusitio.com/Libros</code>, este controlador se activa. Llama al <code>LibroService</code> para pedirle la lista de libros, y luego le pasa esa lista a la carpeta <code>Views</code> para que dibuje la página web y se la envíe al usuario.</p>
+            </div>
+            
+            <div class="card">
+                <h3>📁 ViewModels / CrearEditarLibroViewModel.cs</h3>
+                <p><strong>Función:</strong> Es un "mensajero".</p>
+                <p><strong>Por qué se usa:</strong> En lugar de enviar todo el Modelo <code>Libro.cs</code> completo a la pantalla, se crea un "ViewModel" que solo contiene la información estricta y necesaria para crear o editar un libro. Esto hace que la aplicación sea más segura y rápida.</p>
+            </div>
+        </section>
+
+        <section id="flujo-completo">
+            <h1>5. Flujo completo del proyecto</h1>
+            <p>¿Qué pasa exactamente cuando haces clic en "Ver Libros" en la página web? Ocurre un viaje de ida y vuelta a la velocidad de la luz:</p>
+
+            <div class="flow-container">
+                <div class="flow-box">1. USUARIO (Navegador)</div>
+                <div class="flow-arrow">⬇️ Hace clic en un enlace a /Libros</div>
+                
+                <div class="flow-box">2. RUTAS (Program.cs)</div>
+                <div class="flow-arrow">⬇️ Detecta que quieres ir al Controlador de Libros</div>
+                
+                <div class="flow-box" style="background-color: #059669;">3. LibrosController.cs</div>
+                <div class="flow-arrow">⬇️ Pide ayuda al servicio</div>
+                
+                <div class="flow-box" style="background-color: #d97706;">4. LibroService.cs</div>
+                <div class="flow-arrow">⬇️ Solicita datos a la base de datos</div>
+                
+                <div class="flow-box" style="background-color: #dc2626;">5. Base de Datos (SQL Server)</div>
+                <div class="flow-arrow">⬆️ Devuelve los libros encontrados</div>
+                
+                <div class="flow-box" style="background-color: #d97706;">6. LibroService.cs</div>
+                <div class="flow-arrow">⬆️ Empaqueta los libros en un ViewModel</div>
+                
+                <div class="flow-box" style="background-color: #059669;">7. LibrosController.cs</div>
+                <div class="flow-arrow">⬆️ Entrega el paquete a la Vista HTML</div>
+                
+                <div class="flow-box" style="background-color: #7c3aed;">8. Views/Libros/Index.cshtml</div>
+                <div class="flow-arrow">⬆️ Dibuja la tabla con colores y botones</div>
+                
+                <div class="flow-box">9. USUARIO (Navegador)</div>
+                <p><em>El usuario ve la lista de libros en su pantalla.</em></p>
+            </div>
+        </section>
+
+        <section id="codigo">
+            <h1>6. Explicación del código</h1>
+            <p>Vamos a desglosar fragmentos reales de código del proyecto para entenderlos línea por línea.</p>
+
+            <h3>Variables y Propiedades (En Models/Libro.cs)</h3>
+            <pre><code>public class Libro
+{
+    public int Id { get; set; }
+    public string Titulo { get; set; } = string.Empty;
+}</code></pre>
+            <ul>
+                <li><code>public</code>: Significa que cualquier otra parte del sistema puede leer esto.</li>
+                <li><code>int</code>: Es un tipo de dato. Significa "Número entero". El ID (identificador) será un número como 1, 2, 3...</li>
+                <li><code>string</code>: Significa "Cadena de texto". El Título será texto (ej. "Cien años de soledad").</li>
+                <li><code>{ get; set; }</code>: Significa que el programa puede obtener (get) el valor y también modificarlo (set).</li>
+            </ul>
+
+            <h3>Controladores y Peticiones (En Controllers/LibrosController.cs)</h3>
+            <pre><code>[HttpPost]
+public async Task&lt;IActionResult&gt; Create(CrearEditarLibroViewModel viewModel)
+{
+    if (ModelState.IsValid)
+    {
+        await _libroService.CrearLibroAsync(viewModel);
+        return RedirectToAction(nameof(Index));
+    }
+    return View(viewModel);
+}</code></pre>
+            <ul>
+                <li><code>[HttpPost]</code>: Esto es un escudo de seguridad. Significa que esta función solo se activa si el usuario está enviando un formulario (POST), no si solo escribe la dirección en el navegador.</li>
+                <li><code>async / await</code>: Significa "Asíncrono". Le dice al servidor: "Voy a guardar esto en la base de datos, va a demorar unas milésimas de segundo, tú atiende a otras personas mientras termino". Hace que el sistema no se congele.</li>
+                <li><code>ModelState.IsValid</code>: Revisa si el usuario llenó bien el formulario (ej. que no haya dejado el título en blanco).</li>
+                <li><code>RedirectToAction("Index")</code>: Si todo salió bien, redirige al usuario de vuelta a la lista de libros principal.</li>
+            </ul>
+
+            <h3>Consultas a Bases de datos (En Services/LibroService.cs)</h3>
+            <pre><code>var query = _context.Libros
+    .Include(l => l.Autor)
+    .Where(l => !l.Prestamos.Any(p => p.FechaDevolucion == null))
+    .ToList();</code></pre>
+            <p><strong>Qué hace esto:</strong> Esto es "LINQ", la forma mágica de C# de hablar con la base de datos.</p>
+            <ol>
+                <li><code>_context.Libros</code>: Entra a la tabla de libros.</li>
+                <li><code>.Include(l => l.Autor)</code>: Trae también la información del Autor (para que no salga solo el ID del autor, sino su nombre).</li>
+                <li><code>.Where(...)</code>: Filtra los resultados. En español dice: "Tráeme los libros DONDE no exista ningún préstamo que tenga la Fecha de Devolución en blanco". Es decir, busca los libros que sí están Disponibles.</li>
+            </ol>
+
+        </section>
+
+        <section id="base-datos">
+            <h1>7. Base de datos</h1>
+            <p>El proyecto utiliza una base de datos Relacional. Imagina una base de datos como un gran libro de Excel con varias hojas conectadas entre sí. A cada hoja se le llama <strong>Tabla</strong>.</p>
+            
+            <p>El proyecto tiene 3 tablas principales:</p>
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                <div class="card" style="flex: 1; min-width: 250px;">
+                    <h3>Tabla: Autores</h3>
+                    <ul>
+                        <li><strong>Id</strong> (Clave Primaria): Número único (ej. 1)</li>
+                        <li><strong>Nombre</strong>: Texto (ej. "Gabriel García")</li>
+                        <li><strong>Nacionalidad</strong>: Texto (ej. "Colombia")</li>
+                    </ul>
+                </div>
+                
+                <div class="card" style="flex: 1; min-width: 250px;">
+                    <h3>Tabla: Libros</h3>
+                    <ul>
+                        <li><strong>Id</strong> (Clave Primaria): Número único (ej. 5)</li>
+                        <li><strong>Titulo</strong>: Texto (ej. "El Coronel")</li>
+                        <li><strong>AutorId</strong> (Clave Foránea): Apunta al Autor (ej. 1)</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="flex: 1; min-width: 250px;">
+                    <h3>Tabla: Prestamos</h3>
+                    <ul>
+                        <li><strong>Id</strong>: Número único</li>
+                        <li><strong>LibroId</strong> (Clave Foránea): Qué libro se prestó</li>
+                        <li><strong>NombrePrestatario</strong>: A quién se prestó</li>
+                        <li><strong>FechaDevolucion</strong>: Cuándo lo entregó</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p><strong>Relaciones:</strong></p>
+            <ul>
+                <li><strong>Clave Primaria (Primary Key - PK):</strong> Es como el número de cédula o DNI de cada fila. Nunca se repite. Todos los <code>Id</code> son claves primarias.</li>
+                <li><strong>Clave Foránea (Foreign Key - FK):</strong> Es un puente que une dos tablas. La columna <code>AutorId</code> en la tabla Libros sirve para no tener que escribir "Gabriel García" en 100 libros. Solo se escribe el número "1", y el sistema sabe que el libro pertenece al autor número 1.</li>
+            </ul>
+        </section>
+
+        <section id="api-comunicacion">
+            <h1>8. HTTP y Comunicación (El Navegador y el Servidor)</h1>
+            <p>Aunque esto no es una API pura (porque devuelve HTML y no datos crudos), la comunicación usa las reglas universales del internet: el protocolo <strong>HTTP</strong>.</p>
+
+            <p>Hay dos tipos principales de peticiones que hace este proyecto:</p>
+            
+            <table style="margin-top: 15px;">
+                <tr>
+                    <th>Método HTTP</th>
+                    <th>¿Para qué se usa en el proyecto?</th>
+                    <th>Ejemplo real</th>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td>Para <strong>pedir información</strong>. No cambia nada en la base de datos. Solo "lee".</td>
+                    <td>Cuando haces clic en "Editar", el navegador hace un <code>GET /Libros/Edit/5</code> para pedir el formulario del libro 5.</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td>Para <strong>enviar información</strong>. Modifica la base de datos (crea o actualiza).</td>
+                    <td>Cuando llenas el formulario y presionas "Guardar", se hace un <code>POST /Libros/Create</code> enviando los datos ocultos.</td>
+                </tr>
+            </table>
+
+            <div class="highlight">
+                <strong>¿Qué es un Endpoint / Ruta?</strong><br>
+                Es la dirección (URL). En este proyecto las rutas se construyen así: <code>Controlador / Acción / Id</code>.<br>
+                Ejemplo: <code>tusitio.com/Libros/Delete/3</code><br>
+                Esto le dice al sistema: Ve al archivo <strong>Libros</strong>Controller, ejecuta la función <strong>Delete</strong>, para el elemento con el número <strong>3</strong>.
+            </div>
+        </section>
+
+        <section id="flujo-real">
+            <h1>9. Flujo de una acción real: Crear un Préstamo</h1>
+            <p>Imaginemos que Juan quiere llevarse prestado el libro "1984". Esto es exactamente lo que ocurre internamente en la aplicación, paso a paso:</p>
+
+            <ol>
+                <li>El bibliotecario hace clic en el botón "Nuevo Préstamo".</li>
+                <li>El navegador web hace una petición <strong>GET</strong> a la ruta <code>/Prestamos/Create</code>.</li>
+                <li>El archivo <code>PrestamosController.cs</code> recibe la petición. Ejecuta la función <code>Create()</code>.</li>
+                <li>Dentro de esa función, el sistema va a la base de datos y busca la lista de todos los libros disponibles para poder llenar un menú desplegable (Select).</li>
+                <li>El controlador devuelve la pantalla (Vista) HTML <code>Create.cshtml</code> con el menú cargado.</li>
+                <li>El bibliotecario selecciona el libro "1984", escribe el nombre "Juan" y hace clic en <strong>Guardar</strong>.</li>
+                <li>El navegador junta esos datos y los envía empaquetados mediante una petición <strong>POST</strong> de vuelta a <code>/Prestamos/Create</code>.</li>
+                <li>El controlador recibe el paquete (llamado <code>CrearEditarPrestamoViewModel</code>). Revisa que todo esté correcto (ej. que el nombre no esté vacío).</li>
+                <li>El controlador le pasa los datos a <code>PrestamoService.cs</code>.</li>
+                <li>El servicio crea un nuevo objeto "Prestamo" en memoria, le asigna la fecha de hoy automáticamente, y le dice al <code>ApplicationDbContext</code> que lo guarde.</li>
+                <li>Entity Framework traduce esto a SQL (ej. <code>INSERT INTO Prestamos...</code>) y lo guarda permanentemente en SQL Server.</li>
+                <li>El controlador responde al navegador con una instrucción: "Todo salió bien, ahora redirige al usuario a la página de inicio (Index)".</li>
+                <li>El bibliotecario ve la lista principal y nota que ahora aparece el préstamo de Juan.</li>
+            </ol>
+        </section>
+
+        <section id="errores">
+            <h1>10. Errores y posibles problemas</h1>
+            <p>Si intentas modificar o ejecutar el proyecto por primera vez, podrías encontrarte con estos obstáculos:</p>
+
+            <div class="card">
+                <h3 style="color: #dc2626;">Problema: No se puede conectar a la Base de Datos</h3>
+                <p><strong>Causa:</strong> El archivo <code>appsettings.json</code> tiene una "Cadena de Conexión" que dice <code>Server=(localdb)\mssqllocaldb</code>. Esto asume que tienes instalado SQL Server Express LocalDB en tu computador.</p>
+                <p><strong>Solución:</strong> Si estás en un Mac o usas otro tipo de servidor, debes cambiar esa línea por la ruta correcta de tu base de datos, o instalar las herramientas de desarrollo de SQL de Visual Studio en tu Windows.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="color: #dc2626;">Problema: La tabla 'Libros' no existe (Error de SQL)</h3>
+                <p><strong>Causa:</strong> El código define las tablas, pero no has ejecutado el comando para que la base de datos física las construya.</p>
+                <p><strong>Solución:</strong> Tienes que ejecutar las "Migraciones" de Entity Framework. Las migraciones son las instrucciones paso a paso para crear las tablas desde cero.</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: #dc2626;">Problema: Archivos no encontrados (Error 404)</h3>
+                <p><strong>Causa:</strong> Borraste o cambiaste el nombre de una vista en la carpeta <code>Views</code> (ej. cambiaste Index.cshtml a Lista.cshtml) pero el controlador sigue intentando abrir "Index".</p>
+                <p><strong>Solución:</strong> En MVC, el nombre del archivo en la carpeta Views debe coincidir EXACTAMENTE con el nombre de la función (Acción) en el Controlador, a menos que especifiques lo contrario en el código.</p>
+            </div>
+        </section>
+
+        <section id="instalacion">
+            <h1>11. Instalación y ejecución</h1>
+            <p>Para encender el proyecto en tu computador desde cero, debes seguir estos pasos en la terminal (línea de comandos) estando dentro de la carpeta <code>BibliotecaApp\BibliotecaApp</code>.</p>
+
+            <pre><code># 1. Requisitos
+Debes tener instalado el SDK de .NET (versión 8 o 9) y SQL Server LocalDB.
+
+# 2. Restaurar dependencias
+# Esto descarga de internet todas las herramientas externas que usa el proyecto
+dotnet restore
+
+# 3. Crear la base de datos
+# Entity Framework leerá tus modelos (Libros, Autores) y creará las tablas físicamente.
+dotnet ef database update
+
+# 4. Iniciar el servidor
+# Esto compila el código C# y arranca un servidor web local.
+dotnet run</code></pre>
+
+            <p><strong>Cómo comprobar que funciona:</strong><br>
+            Después de ejecutar <code>dotnet run</code>, la terminal te dirá algo como: <em>"Now listening on: http://localhost:5000"</em>. Copia esa dirección, pégala en Chrome, y deberías ver la página principal de la Biblioteca. El proyecto cuenta con un archivo <code>DbSeeder.cs</code> que insertará datos falsos de prueba automáticamente la primera vez que inicie, así que no verás el sistema vacío.</p>
+        </section>
+
+        <section id="conceptos">
+            <h1>12. Conceptos que debo aprender</h1>
+            <p>Si quieres volverte un experto y poder modificar esta aplicación a tu antojo, este es tu mapa de estudio:</p>
+
+            <div class="card">
+                <h3>🟢 Nivel básico (Lo primero que debes buscar en YouTube)</h3>
+                <ul>
+                    <li><strong>Lógica de programación:</strong> Qué es una variable, un condicional (if/else), y un ciclo (for).</li>
+                    <li><strong>HTML y CSS básicos:</strong> Cómo crear una etiqueta <code>&lt;div&gt;</code>, un formulario, y cómo cambiar colores.</li>
+                    <li><strong>Programación Orientada a Objetos (POO):</strong> Entender qué es una Clase (ej. <code>class Libro</code>) y qué es un Objeto (Un libro físico en específico).</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🟡 Nivel intermedio (Para entender este proyecto en particular)</h3>
+                <ul>
+                    <li><strong>C# Básico:</strong> La sintaxis del lenguaje.</li>
+                    <li><strong>El patrón MVC (Modelo-Vista-Controlador):</strong> Cómo interactúan estas tres piezas y cómo fluyen los datos entre ellas.</li>
+                    <li><strong>Entity Framework Core:</strong> Cómo conectar C# con SQL. Aprender qué es un <code>DbSet</code> y cómo hacer un <code>.Where()</code> o <code>.Include()</code> (LINQ).</li>
+                    <li><strong>Inyección de Dependencias:</strong> Entender por qué se usa <code>builder.Services.AddScoped</code> en el archivo Program.cs.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🔴 Nivel avanzado (Para crear proyectos gigantes)</h3>
+                <ul>
+                    <li><strong>Programación Asíncrona (async/await):</strong> Cómo hacer que tu programa ejecute tareas en segundo plano sin congelar la pantalla.</li>
+                    <li><strong>El patrón Repository o Arquitectura de Capas:</strong> Aunque este proyecto usa "Servicios", hay formas más avanzadas de organizar bases de datos gigantescas.</li>
+                    <li><strong>Autenticación y JWT:</strong> Cómo agregar un sistema de Login para que solo administradores puedan borrar libros.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="glosario">
+            <h1>13. Glosario</h1>
+            <table>
+                <tr>
+                    <th>Concepto técnico</th>
+                    <th>Explicación sencilla</th>
+                </tr>
+                <tr>
+                    <td><strong>Frontend</strong></td>
+                    <td>La cara visible del proyecto. Los botones, colores y tablas que ve el usuario en su pantalla (HTML/CSS).</td>
+                </tr>
+                <tr>
+                    <td><strong>Backend</strong></td>
+                    <td>El motor invisible. Todo lo que ocurre detrás: cálculos lógicos, seguridad y acceso a la base de datos (C#).</td>
+                </tr>
+                <tr>
+                    <td><strong>Framework</strong></td>
+                    <td>Una caja de herramientas o plantilla preconstruida (ASP.NET Core) para no empezar a programar desde cero.</td>
+                </tr>
+                <tr>
+                    <td><strong>Middleware</strong></td>
+                    <td>Pequeños guardias de seguridad que inspeccionan las peticiones que llegan al servidor antes de dejarlas entrar al controlador.</td>
+                </tr>
+                <tr>
+                    <td><strong>Query / Consulta</strong></td>
+                    <td>Una pregunta o instrucción que se le hace a la base de datos. Ej: "Tráeme todos los libros del año 2000".</td>
+                </tr>
+                <tr>
+                    <td><strong>Vista (View)</strong></td>
+                    <td>Un archivo de interfaz gráfica (.cshtml). Es una plantilla HTML que puede imprimir variables de C# en la pantalla.</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="resumen">
+            <h1>14. Resumen final</h1>
+            <div class="highlight" style="font-size: 1.1rem; line-height: 1.8;">
+                <p>La <strong>BibliotecaApp</strong> es una aplicación web clásica, construida con C# y ASP.NET Core.</p>
+                <p>Funciona bajo un patrón de organización llamado <strong>MVC</strong>. Cuando un usuario interactúa con la página (Frontend), su navegador envía una señal al servidor. Esta señal es recibida por un <strong>Controlador</strong>, quien delega el trabajo pesado a los <strong>Servicios</strong>. Los servicios se conectan a una base de datos <strong>SQL Server</strong> mediante un traductor llamado <strong>Entity Framework Core</strong>.</p>
+                <p>Una vez que el servicio rescata la información (por ejemplo, la lista de libros), la empaqueta (ViewModels) y se la devuelve al Controlador. El Controlador toma ese paquete, se lo inserta a una plantilla de diseño (Vista), y esa Vista es lo que finalmente viaja por internet de regreso al monitor del usuario.</p>
+                <p>Para modificar el sistema, necesitas dominar C# para cambiar la lógica en el servidor, HTML/CSS para cambiar cómo se ve en pantalla, y entender conceptos básicos de Bases de Datos para añadir nueva información al registro.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Funcionalidad para el botón de Cambio de Tema (Oscuro / Claro)
+        function toggleTheme() {
+            const body = document.documentElement;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Cargar el tema preferido por el usuario la próxima vez que abra la página
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        };
+    </script>
+</body>
+</html>

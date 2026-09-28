@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitectura en Capas ASP.NET Core MVC - Ejemplo Completo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #5a67d8;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .intro-box {
+            background: #f7fafc;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .diagram {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .diagram-box {
+            display: inline-block;
+            background: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid #667eea;
+            font-weight: bold;
+        }
+
+        .diagram-arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .keyword { color: #c792ea; }
+        .string { color: #c3e88d; }
+        .comment { color: #676e95; font-style: italic; }
+        .type { color: #82aaff; }
+        .method { color: #82aaff; }
+
+        .file-path {
+            background: #edf2f7;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #4a5568;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        .step {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .benefits {
+            background: #f0fff4;
+            border-left: 5px solid #48bb78;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .benefits ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .benefits li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .benefits li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .warning {
+            background: #fffaf0;
+            border-left: 5px solid #ed8936;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .tip {
+            background: #ebf8ff;
+            border-left: 5px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .folder-structure {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 20px 0;
+        }
+
+        .folder-structure .folder {
+            color: #fbd38d;
+        }
+
+        .folder-structure .file {
+            color: #90cdf4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ Arquitectura en Capas ASP.NET Core MVC</h1>
+        <p class="subtitle">Ejemplo Completo con Services + ViewModels</p>
+
+        <div class="intro-box">
+            <h3>📋 ¿Qué vamos a construir?</h3>
+            <p>Una aplicación completa de gestión de <strong>Empleados</strong> usando la arquitectura en capas con:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>Modelo:</strong> Empleado (7 campos)</li>
+                <li><strong>ViewModel:</strong> CrearEmpleadoViewModel</li>
+                <li><strong>Servicio:</strong> IEmpleadoService + EmpleadoService</li>
+                <li><strong>Controlador:</strong> EmpleadoController (delgado)</li>
+                <li><strong>Vistas:</strong> Index, Create, Edit, Details, Delete</li>
+            </ul>
+        </div>
+
+        <h2>🎯 ¿Qué es la Arquitectura en Capas?</h2>
+        
+        <div class="diagram">
+            <h3 style="margin-bottom: 20px;">Flujo de la Arquitectura</h3>
+            <div class="diagram-box" style="background: #f0fff4; border-color: #48bb78;">
+                🌐 Vista (Razor)
+            </div>
+            <span class="diagram-arrow">→</span>
+            <div class="diagram-box" style="background: #ebf8ff; border-color: #4299e1;">
+                🎮 Controlador
+            </div>
+            <span class="diagram-arrow">→</span>
+            <div class="diagram-box" style="background: #faf5ff; border-color: #9f7aea;">
+                ⚙️ Servicio
+            </div>
+            <span class="diagram-arrow">→</span>
+            <div class="diagram-box" style="background: #fffaf0; border-color: #ed8936;">
+                💾 DbContext
+            </div>
+        </div>
+
+        <div class="benefits">
+            <h3>💡 Ventajas de esta Arquitectura</h3>
+            <ul>
+                <li><strong>Seguridad:</strong> ViewModels previenen overposting automáticamente</li>
+                <li><strong>Mantenibilidad:</strong> Cada capa tiene una responsabilidad clara</li>
+                <li><strong>Testeabilidad:</strong> Los servicios se pueden probar con unit tests</li>
+                <li><strong>Reutilización:</strong> La lógica de negocio está centralizada</li>
+                <li><strong>Controladores delgados:</strong> Solo coordinan, no procesan</li>
+            </ul>
+        </div>
+
+        <h2>📁 Estructura del Proyecto</h2>
+        
+        <div class="folder-structure">
+<span class="folder">BibliotecaApp/</span>
+├── <span class="folder">Controllers/</span>
+│   └── <span class="file">EmpleadoController.cs</span>
+├── <span class="folder">Data/</span>
+│   └── <span class="file">ApplicationDbContext.cs</span>
+├── <span class="folder">Models/</span>
+│   └── <span class="file">Empleado.cs</span>
+├── <span class="folder">Services/</span>
+│   ├── <span class="file">IEmpleadoService.cs</span>
+│   └── <span class="file">EmpleadoService.cs</span>
+├── <span class="folder">ViewModels/</span>
+│   ├── <span class="file">CrearEmpleadoViewModel.cs</span>
+│   └── <span class="file">EmpleadoDetalleViewModel.cs</span>
+├── <span class="folder">Views/</span>
+│   └── <span class="folder">Empleado/</span>
+│       ├── <span class="file">Index.cshtml</span>
+│       ├── <span class="file">Create.cshtml</span>
+│       ├── <span class="file">Edit.cshtml</span>
+│       ├── <span class="file">Details.cshtml</span>
+│       └── <span class="file">Delete.cshtml</span>
+└── <span class="file">Program.cs</span>
+        </div>
+
+        <h2>🔨 Implementación Paso a Paso</h2>
+
+        <!-- PASO 1: MODELO -->
+        <div class="step">
+            <h3><span class="step-number">1</span> Modelo: Empleado.cs</h3>
+            <div class="file-path">Models/Empleado.cs</div>
+            <pre><code><span class="keyword">using</span> System.ComponentModel.DataAnnotations;
+<span class="keyword">using</span> System.ComponentModel.DataAnnotations.Schema;
+
+<span class="keyword">namespace</span> BibliotecaApp.Models
+{
+    <span class="keyword">public class</span> <span class="type">Empleado</span>
+    {
+        <span class="keyword">public int</span> Id { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+        [Required(ErrorMessage = <span class="string">"El nombre es obligatorio"</span>)]
+        [StringLength(100)]
+        <span class="keyword">public string</span> Nombre { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+
+        [Required(ErrorMessage = <span class="string">"El apellido es obligatorio"</span>)]
+        [StringLength(100)]
+        <span class="keyword">public string</span> Apellido { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+
+        [Required(ErrorMessage = <span class="string">"El email es obligatorio"</span>)]
+        [EmailAddress(ErrorMessage = <span class="string">"Email inválido"</span>)]
+        <span class="keyword">public string</span> Email { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+
+        [Phone(ErrorMessage = <span class="string">"Teléfono inválido"</span>)]
+        <span class="keyword">public string</span>? Telefono { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+        [Display(Name = <span class="string">"Fecha de Contratación"</span>)]
+        [DataType(DataType.Date)]
+        <span class="keyword">public</span> DateTime? FechaContratacion { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+        [Column(TypeName = <span class="string">"decimal(18,2)"</span>)]
+        [Range(0, 1000000, ErrorMessage = <span class="string">"El salario debe estar entre 0 y 1,000,000"</span>)]
+        <span class="keyword">public decimal</span> Salario { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    }
+}</code></pre>
+            <div class="tip">
+                <strong>💡 Nota:</strong> El modelo representa la estructura de la base de datos. Tiene 7 campos: Id, Nombre, Apellido, Email, Telefono, FechaContratacion y Salario.
+            </div>
+        </div>
+
+        <!-- PASO 2: VIEWMODEL -->
+        <div class="step">
+            <h3><span class="step-number">2</span> ViewModel: CrearEmpleadoViewModel.cs</h3>
+            <div class="file-path">ViewModels/CrearEmpleadoViewModel.cs</div>
+            <pre><code><span class="keyword">using</span> System.ComponentModel.DataAnnotations;
+
+<span class="keyword">namespace</span> BibliotecaApp.ViewModels
+{
+    <span class="keyword">public class</span> <span class="type">CrearEmpleadoViewModel</span>
+    {
+        [Required(ErrorMessage = <span class="string">"El nombre es obligatorio"</span>)]
+        [StringLength(100, ErrorMessage = <span class="string">"Máximo 100 caracteres"</span>)]
+        [Display(Name = <span class="string">"Nombre"</span>)]
+        <span class="keyword">public string</span> Nombre { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+
+        [Required(ErrorMessage = <span class="string">"El apellido es obligatorio"</span>)]
+        [StringLength(100, ErrorMessage = <span class="string">"Máximo 100 caracteres"</span>)]
+        [Display(Name = <span class="string">"Apellido"</span>)]
+        <span class="keyword">public string</span> Apellido { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+
+        [Required(ErrorMessage = <span class="string">"El email es obligatorio"</span>)]
+        [EmailAddress(ErrorMessage = <span class="string">"Email inválido"</span>)]
+        [Display(Name = <span class="string">"Correo Electrónico"</span>)]
+        <span class="keyword">public string</span> Email { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">string</span>.Empty;
+
+        [Phone(ErrorMessage = <span class="string">"Teléfono inválido"</span>)]
+        [Display(Name = <span class="string">"Teléfono"</span>)]
+        <span class="keyword">public string</span>? Telefono { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+        [Display(Name = <span class="string">"Fecha de Contratación"</span>)]
+        [DataType(DataType.Date)]
+        <span class="keyword">public</span> DateTime? FechaContratacion { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+        [Range(0, 1000000, ErrorMessage = <span class="string">"El salario debe estar entre 0 y 1,000,000"</span>)]
+        [Display(Name = <span class="string">"Salario"</span>)]
+        <span class="keyword">public decimal</span> Salario { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    }
+}</code></pre>
+            <div class="warning">
+                <strong>⚠️ Importante:</strong> El ViewModel NO tiene Id (lo genera la base de datos). Solo contiene los campos que el usuario puede llenar en el formulario.
+            </div>
+        </div>
+
+        <!-- PASO 3: INTERFAZ DEL SERVICIO -->
+        <div class="step">
+            <h3><span class="step-number">3</span> Interfaz del Servicio: IEmpleadoService.cs</h3>
+            <div class="file-path">Services/IEmpleadoService.cs</div>
+            <pre><code><span class="keyword">using</span> BibliotecaApp.Models;
+<span class="keyword">using</span> BibliotecaApp.ViewModels;
+
+<span class="keyword">namespace</span> BibliotecaApp.Services
+{
+    <span class="keyword">public interface</span> <span class="type">IEmpleadoService</span>
+    {
+        Task&lt;IEnumerable&lt;Empleado&gt;&gt; <span class="method">ObtenerTodosAsync</span>();
+        Task&lt;Empleado?&gt; <span class="method">ObtenerPorIdAsync</span>(<span class="keyword">int</span> id);
+        Task&lt;<span class="keyword">bool</span>&gt; <span class="method">CrearEmpleadoAsync</span>(CrearEmpleadoViewModel viewModel);
+        Task&lt;<span class="keyword">bool</span>&gt; <span class="method">ActualizarEmpleadoAsync</span>(<span class="keyword">int</span> id, CrearEmpleadoViewModel viewModel);
+        Task&lt;<span class="keyword">bool</span>&gt; <span class="method">EliminarEmpleadoAsync</span>(<span class="keyword">int</span> id);
+    }
+}</code></pre>
+            <div class="tip">
+                <strong>💡 ¿Por qué una interfaz?</strong> Permite inyectar dependencias y facilita las pruebas unitarias. Puedes crear mocks del servicio para testing.
+            </div>
+        </div>
+
+        <!-- PASO 4: IMPLEMENTACIÓN DEL SERVICIO -->
+        <div class="step">
+            <h3><span class="step-number">4</span> Implementación del Servicio: EmpleadoService.cs</h3>
+            <div class="file-path">Services/EmpleadoService.cs</div>
+            <pre><code><span class="keyword">using</span> BibliotecaApp.Data;
+<span class="keyword">using</span> BibliotecaApp.Models;
+<span class="keyword">using</span> BibliotecaApp.ViewModels;
+<span class="keyword">using</span> Microsoft.EntityFrameworkCore;
+
+<span class="keyword">namespace</span> BibliotecaApp.Services
+{
+    <span class="keyword">public class</span> <span class="type">EmpleadoService</span> : IEmpleadoService
+    {
+        <span class="keyword">private readonly</span> ApplicationDbContext _context;
+
+        <span class="keyword">public</span> <span class="method">EmpleadoService</span>(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        <span class="keyword">public async</span> Task&lt;IEnumerable&lt;Empleado&gt;&gt; <span class="method">ObtenerTodosAsync</span>()
+        {
+            <span class="keyword">return await</span> _context.Empleados.ToListAsync();
+        }
+
+        <span class="keyword">public async</span> Task&lt;Empleado?&gt; <span class="method">ObtenerPorIdAsync</span>(<span class="keyword">int</span> id)
+        {
+            <span class="keyword">return await</span> _context.Empleados.FindAsync(id);
+        }
+
+        <span class="keyword">public async</span> Task&lt;<span class="keyword">bool</span>&gt; <span class="method">CrearEmpleadoAsync</span>(CrearEmpleadoViewModel viewModel)
+        {
+            <span class="comment">// Mapeo manual de ViewModel a Modelo</span>
+            <span class="keyword">var</span> empleado = <span class="keyword">new</span> Empleado
+            {
+                Nombre = viewModel.Nombre,
+                Apellido = viewModel.Apellido,
+                Email = viewModel.Email,
+                Telefono = viewModel.Telefono,
+                FechaContratacion = viewModel.FechaContratacion,
+                Salario = viewModel.Salario
+            };
+
+            _context.Empleados.Add(empleado);
+            <span class="keyword">await</span> _context.SaveChangesAsync();
+            
+            <span class="keyword">return true</span>;
+        }
+
+        <span class="keyword">public async</span> Task&lt;<span class="keyword">bool</span>&gt; <span class="method">ActualizarEmpleadoAsync</span>(<span class="keyword">int</span> id, CrearEmpleadoViewModel viewModel)
+        {
+            <span class="keyword">var</span> empleado = <span class="keyword">await</span> _context.Empleados.FindAsync(id);
+            
+            <span class="keyword">if</span> (empleado == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return false</span>;
+            }
+
+            <span class="comment">// Actualizar solo los campos permitidos</span>
+            empleado.Nombre = viewModel.Nombre;
+            empleado.Apellido = viewModel.Apellido;
+            empleado.Email = viewModel.Email;
+            empleado.Telefono = viewModel.Telefono;
+            empleado.FechaContratacion = viewModel.FechaContratacion;
+            empleado.Salario = viewModel.Salario;
+
+            <span class="keyword">await</span> _context.SaveChangesAsync();
+            
+            <span class="keyword">return true</span>;
+        }
+
+        <span class="keyword">public async</span> Task&lt;<span class="keyword">bool</span>&gt; <span class="method">EliminarEmpleadoAsync</span>(<span class="keyword">int</span> id)
+        {
+            <span class="keyword">var</span> empleado = <span class="keyword">await</span> _context.Empleados.FindAsync(id);
+            
+            <span class="keyword">if</span> (empleado == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return false</span>;
+            }
+
+            _context.Empleados.Remove(empleado);
+            <span class="keyword">await</span> _context.SaveChangesAsync();
+            
+            <span class="keyword">return true</span>;
+        }
+    }
+}</code></pre>
+        </div>
+
+        <!-- PASO 5: CONTROLADOR -->
+        <div class="step">
+            <h3><span class="step-number">5</span> Controlador Delgado: EmpleadoController.cs</h3>
+            <div class="file-path">Controllers/EmpleadoController.cs</div>
+            <pre><code><span class="keyword">using</span> BibliotecaApp.Services;
+<span class="keyword">using</span> BibliotecaApp.ViewModels;
+<span class="keyword">using</span> Microsoft.AspNetCore.Mvc;
+
+<span class="keyword">namespace</span> BibliotecaApp.Controllers
+{
+    <span class="keyword">public class</span> <span class="type">EmpleadoController</span> : Controller
+    {
+        <span class="keyword">private readonly</span> IEmpleadoService _empleadoService;
+
+        <span class="keyword">public</span> <span class="method">EmpleadoController</span>(IEmpleadoService empleadoService)
+        {
+            _empleadoService = empleadoService;
+        }
+
+        <span class="comment">// GET: Empleado</span>
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Index</span>()
+        {
+            <span class="keyword">var</span> empleados = <span class="keyword">await</span> _empleadoService.ObtenerTodosAsync();
+            <span class="keyword">return</span> View(empleados);
+        }
+
+        <span class="comment">// GET: Empleado/Details/5</span>
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Details</span>(<span class="keyword">int</span>? id)
+        {
+            <span class="keyword">if</span> (id == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="keyword">var</span> empleado = <span class="keyword">await</span> _empleadoService.ObtenerPorIdAsync(id.Value);
+            
+            <span class="keyword">if</span> (empleado == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="keyword">return</span> View(empleado);
+        }
+
+        <span class="comment">// GET: Empleado/Create</span>
+        <span class="keyword">public</span> IActionResult <span class="method">Create</span>()
+        {
+            <span class="keyword">return</span> View();
+        }
+
+        <span class="comment">// POST: Empleado/Create</span>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Create</span>(CrearEmpleadoViewModel viewModel)
+        {
+            <span class="keyword">if</span> (!ModelState.IsValid)
+            {
+                <span class="keyword">return</span> View(viewModel);
+            }
+
+            <span class="keyword">await</span> _empleadoService.CrearEmpleadoAsync(viewModel);
+            <span class="keyword">return</span> RedirectToAction(<span class="keyword">nameof</span>(Index));
+        }
+
+        <span class="comment">// GET: Empleado/Edit/5</span>
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Edit</span>(<span class="keyword">int</span>? id)
+        {
+            <span class="keyword">if</span> (id == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="keyword">var</span> empleado = <span class="keyword">await</span> _empleadoService.ObtenerPorIdAsync(id.Value);
+            
+            <span class="keyword">if</span> (empleado == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="comment">// Mapear de Modelo a ViewModel</span>
+            <span class="keyword">var</span> viewModel = <span class="keyword">new</span> CrearEmpleadoViewModel
+            {
+                Nombre = empleado.Nombre,
+                Apellido = empleado.Apellido,
+                Email = empleado.Email,
+                Telefono = empleado.Telefono,
+                FechaContratacion = empleado.FechaContratacion,
+                Salario = empleado.Salario
+            };
+
+            <span class="keyword">return</span> View(viewModel);
+        }
+
+        <span class="comment">// POST: Empleado/Edit/5</span>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Edit</span>(<span class="keyword">int</span> id, CrearEmpleadoViewModel viewModel)
+        {
+            <span class="keyword">if</span> (!ModelState.IsValid)
+            {
+                <span class="keyword">return</span> View(viewModel);
+            }
+
+            <span class="keyword">var</span> exito = <span class="keyword">await</span> _empleadoService.ActualizarEmpleadoAsync(id, viewModel);
+            
+            <span class="keyword">if</span> (!exito)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="keyword">return</span> RedirectToAction(<span class="keyword">nameof</span>(Index));
+        }
+
+        <span class="comment">// GET: Empleado/Delete/5</span>
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">Delete</span>(<span class="keyword">int</span>? id)
+        {
+            <span class="keyword">if</span> (id == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="keyword">var</span> empleado = <span class="keyword">await</span> _empleadoService.ObtenerPorIdAsync(id.Value);
+            
+            <span class="keyword">if</span> (empleado == <span class="keyword">null</span>)
+            {
+                <span class="keyword">return</span> NotFound();
+            }
+
+            <span class="keyword">return</span> View(empleado);
+        }
+
+        <span class="comment">// POST: Empleado/Delete/5</span>
+        [HttpPost, ActionName(<span class="string">"Delete"</span>)]
+        [ValidateAntiForgeryToken]
+        <span class="keyword">public async</span> Task&lt;IActionResult&gt; <span class="method">DeleteConfirmed</span>(<span class="keyword">int</span> id)
+        {
+            <span class="keyword">await</span> _empleadoService.EliminarEmpleadoAsync(id);
+            <span class="keyword">return</span> RedirectToAction(<span class="keyword">nameof</span>(Index));
+        }
+    }
+}</code></pre>
+            <div class="benefits">
+                <strong>✅ Observa:</strong> El controlador NO tiene acceso directo al DbContext. Solo llama al servicio. Es delgado, limpio y fácil de entender.
+            </div>
+        </div>
+
+        <!-- PASO 6: PROGRAM.CS -->
+        <div class="step">
+            <h3><span class="step-number">6</span> Registrar el Servicio: Program.cs</h3>
+            <div class="file-path">Program.cs</div>
+            <pre><code><span class="keyword">using</span> BibliotecaApp.Data;
+<span class="keyword">using</span> BibliotecaApp.Services;
+<span class="keyword">using</span> Microsoft.EntityFrameworkCore;
+
+<span class="keyword">var</span> builder = WebApplication.CreateBuilder(args);
+
+<span class="comment">// Agregar servicios al contenedor</span>
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext&lt;ApplicationDbContext&gt;(options =&gt;
+    options.UseSqlServer(builder.Configuration.GetConnectionString(<span class="string">"DefaultConnection"</span>)));
+
+<span class="comment">// ✅ REGISTRAR EL SERVICIO</span>
+builder.Services.AddScoped&lt;IEmpleadoService, EmpleadoService&gt;();
+
+<span class="keyword">var</span> app = builder.Build();
+
+<span class="keyword">if</span> (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler(<span class="string">"/Home/Error"</span>);
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: <span class="string">"default"</span>,
+    pattern: <span class="string">"{controller=Empleado}/{action=Index}/{id?}"</span>)
+    .WithStaticAssets();
+
+app.Run();</code></pre>
+        </div>
+
+        <h2>🎨 Vistas Razor</h2>
+
+        <!-- VISTA INDEX -->
+        <div class="step">
+            <h3><span class="step-number">7</span> Vista Index.cshtml (Lista de Empleados)</h3>
+            <div class="file-path">Views/Empleado/Index.cshtml</div>
+            <pre><code>@model IEnumerable&lt;BibliotecaApp.Models.Empleado&gt;
+
+@{
+    ViewData["Title"] = "Lista de Empleados";
+}
+
+&lt;h2&gt;Lista de Empleados&lt;/h2&gt;
+
+&lt;p&gt;
+    &lt;a asp-action="Create" class="btn btn-primary"&gt;Crear Nuevo Empleado&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;table class="table table-striped"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Nombre Completo&lt;/th&gt;
+            &lt;th&gt;Email&lt;/th&gt;
+            &lt;th&gt;Fecha Contratación&lt;/th&gt;
+            &lt;th&gt;Salario&lt;/th&gt;
+            &lt;th&gt;Acciones&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        @foreach (var item in Model)
+        {
+            &lt;tr&gt;
+                &lt;td&gt;@item.Nombre @item.Apellido&lt;/td&gt;
+                &lt;td&gt;@item.Email&lt;/td&gt;
+                &lt;td&gt;@item.FechaContratacion?.ToString("dd/MM/yyyy")&lt;/td&gt;
+                &lt;td&gt;@item.Salario.ToString("C")&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"&gt;Editar&lt;/a&gt;
+                    &lt;a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"&gt;Detalles&lt;/a&gt;
+                    &lt;a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"&gt;Eliminar&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        }
+    &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            <div class="tip">
+                <strong>💡 Nota:</strong> En el Index solo mostramos 4 campos (Nombre+Apellido, Email, FechaContratacion, Salario). No mostramos Telefono ni Id para mantener la vista limpia.
+            </div>
+        </div>
+
+        <!-- VISTA CREATE -->
+        <div class="step">
+            <h3><span class="step-number">8</span> Vista Create.cshtml (Formulario de Creación)</h3>
+            <div class="file-path">Views/Empleado/Create.cshtml</div>
+            <pre><code>@model BibliotecaApp.ViewModels.CrearEmpleadoViewModel
+
+@{
+    ViewData["Title"] = "Crear Empleado";
+}
+
+&lt;h2&gt;Crear Nuevo Empleado&lt;/h2&gt;
+
+&lt;hr /&gt;
+&lt;div class="row"&gt;
+    &lt;div class="col-md-6"&gt;
+        &lt;form asp-action="Create"&gt;
+            &lt;div asp-validation-summary="ModelOnly" class="text-danger"&gt;&lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Nombre" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Nombre" class="form-control" /&gt;
+                &lt;span asp-validation-for="Nombre" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Apellido" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Apellido" class="form-control" /&gt;
+                &lt;span asp-validation-for="Apellido" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Email" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Email" class="form-control" type="email" /&gt;
+                &lt;span asp-validation-for="Email" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Telefono" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Telefono" class="form-control" type="tel" /&gt;
+                &lt;span asp-validation-for="Telefono" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="FechaContratacion" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="FechaContratacion" class="form-control" type="date" /&gt;
+                &lt;span asp-validation-for="FechaContratacion" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Salario" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Salario" class="form-control" type="number" step="0.01" /&gt;
+                &lt;span asp-validation-for="Salario" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;input type="submit" value="Crear" class="btn btn-primary" /&gt;
+                &lt;a asp-action="Index" class="btn btn-secondary"&gt;Volver a la lista&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}</code></pre>
+            <div class="warning">
+                <strong>⚠️ Importante:</strong> El modelo de esta vista es <code>CrearEmpleadoViewModel</code>, NO el modelo de dominio <code>Empleado</code>. Esto previene overposting automáticamente.
+            </div>
+        </div>
+
+        <!-- VISTA EDIT -->
+        <div class="step">
+            <h3><span class="step-number">9</span> Vista Edit.cshtml (Formulario de Edición)</h3>
+            <div class="file-path">Views/Empleado/Edit.cshtml</div>
+            <pre><code>@model BibliotecaApp.ViewModels.CrearEmpleadoViewModel
+
+@{
+    ViewData["Title"] = "Editar Empleado";
+}
+
+&lt;h2&gt;Editar Empleado&lt;/h2&gt;
+
+&lt;hr /&gt;
+&lt;div class="row"&gt;
+    &lt;div class="col-md-6"&gt;
+        &lt;form asp-action="Edit"&gt;
+            &lt;div asp-validation-summary="ModelOnly" class="text-danger"&gt;&lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Nombre" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Nombre" class="form-control" /&gt;
+                &lt;span asp-validation-for="Nombre" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Apellido" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Apellido" class="form-control" /&gt;
+                &lt;span asp-validation-for="Apellido" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Email" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Email" class="form-control" type="email" /&gt;
+                &lt;span asp-validation-for="Email" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Telefono" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Telefono" class="form-control" type="tel" /&gt;
+                &lt;span asp-validation-for="Telefono" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="FechaContratacion" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="FechaContratacion" class="form-control" type="date" /&gt;
+                &lt;span asp-validation-for="FechaContratacion" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group mb-3"&gt;
+                &lt;label asp-for="Salario" class="control-label"&gt;&lt;/label&gt;
+                &lt;input asp-for="Salario" class="form-control" type="number" step="0.01" /&gt;
+                &lt;span asp-validation-for="Salario" class="text-danger"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;input type="submit" value="Guardar" class="btn btn-primary" /&gt;
+                &lt;a asp-action="Index" class="btn btn-secondary"&gt;Volver a la lista&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}</code></pre>
+            <div class="tip">
+                <strong>💡 Nota:</strong> El Id se pasa como parte de la URL (<code>/Empleado/Edit/5</code>), no como campo del formulario. El controlador lo recibe como parámetro.
+            </div>
+        </div>
+
+        <!-- VISTA DETAILS -->
+        <div class="step">
+            <h3><span class="step-number">10</span> Vista Details.cshtml (Detalles Completos)</h3>
+            <div class="file-path">Views/Empleado/Details.cshtml</div>
+            <pre><code>@model BibliotecaApp.Models.Empleado
+
+@{
+    ViewData["Title"] = "Detalles del Empleado";
+}
+
+&lt;h2&gt;Detalles del Empleado&lt;/h2&gt;
+
+&lt;div&gt;
+    &lt;hr /&gt;
+    &lt;dl class="row"&gt;
+        &lt;dt class="col-sm-3"&gt;Nombre&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Nombre&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Apellido&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Apellido&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Email&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Email&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Teléfono&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@(Model.Telefono ?? "No registrado")&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Fecha de Contratación&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.FechaContratacion?.ToString("dd/MM/yyyy")&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Salario&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Salario.ToString("C")&lt;/dd&gt;
+    &lt;/dl&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"&gt;Editar&lt;/a&gt;
+    &lt;a asp-action="Index" class="btn btn-secondary"&gt;Volver a la lista&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+            <div class="tip">
+                <strong>💡 Nota:</strong> En Details usamos el modelo de dominio directamente porque es solo lectura (no hay riesgo de overposting).
+            </div>
+        </div>
+
+        <!-- VISTA DELETE -->
+        <div class="step">
+            <h3><span class="step-number">11</span> Vista Delete.cshtml (Confirmación de Eliminación)</h3>
+            <div class="file-path">Views/Empleado/Delete.cshtml</div>
+            <pre><code>@model BibliotecaApp.Models.Empleado
+
+@{
+    ViewData["Title"] = "Eliminar Empleado";
+}
+
+&lt;h2&gt;¿Estás seguro de que deseas eliminar este empleado?&lt;/h2&gt;
+
+&lt;div&gt;
+    &lt;hr /&gt;
+    &lt;dl class="row"&gt;
+        &lt;dt class="col-sm-3"&gt;Nombre Completo&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Nombre @Model.Apellido&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Email&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Email&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Fecha de Contratación&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.FechaContratacion?.ToString("dd/MM/yyyy")&lt;/dd&gt;
+        
+        &lt;dt class="col-sm-3"&gt;Salario&lt;/dt&gt;
+        &lt;dd class="col-sm-9"&gt;@Model.Salario.ToString("C")&lt;/dd&gt;
+    &lt;/dl&gt;
+    
+    &lt;form asp-action="Delete"&gt;
+        &lt;input type="hidden" name="id" value="@Model.Id" /&gt;
+        &lt;input type="submit" value="Eliminar" class="btn btn-danger" /&gt;
+        &lt;a asp-action="Index" class="btn btn-secondary"&gt;Cancelar&lt;/a&gt;
+    &lt;/form&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h2>📊 Resumen del Flujo Completo</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>ViewModel/Modelo Usado</th>
+                    <th>Método del Servicio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Index</strong> (Lista)</td>
+                    <td><code>IEnumerable&lt;Empleado&gt;</code></td>
+                    <td><code>ObtenerTodosAsync()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Details</strong> (Detalles)</td>
+                    <td><code>Empleado</code></td>
+                    <td><code>ObtenerPorIdAsync(id)</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Create</strong> (GET)</td>
+                    <td><code>CrearEmpleadoViewModel</code></td>
+                    <td>Ninguno (formulario vacío)</td>
+                </tr>
+                <tr>
+                    <td><strong>Create</strong> (POST)</td>
+                    <td><code>CrearEmpleadoViewModel</code></td>
+                    <td><code>CrearEmpleadoAsync(viewModel)</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Edit</strong> (GET)</td>
+                    <td><code>CrearEmpleadoViewModel</code></td>
+                    <td><code>ObtenerPorIdAsync(id)</code> + mapeo</td>
+                </tr>
+                <tr>
+                    <td><strong>Edit</strong> (POST)</td>
+                    <td><code>CrearEmpleadoViewModel</code></td>
+                    <td><code>ActualizarEmpleadoAsync(id, viewModel)</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Delete</strong> (GET)</td>
+                    <td><code>Empleado</code></td>
+                    <td><code>ObtenerPorIdAsync(id)</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Delete</strong> (POST)</td>
+                    <td>Ninguno</td>
+                    <td><code>EliminarEmpleadoAsync(id)</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="benefits">
+            <h3>🎉 ¡Felicidades!</h3>
+            <p>Ahora tienes una aplicación ASP.NET Core MVC con arquitectura profesional en capas:</p>
+            <ul>
+                <li>✅ Seguridad contra overposting con ViewModels</li>
+                <li>✅ Lógica de negocio centralizada en servicios</li>
+                <li>✅ Controladores delgados y mantenibles</li>
+                <li>✅ Código asíncrono con async/await</li>
+                <li>✅ Fácil de probar con unit tests</li>
+                <li>✅ Preparado para escalar y agregar más funcionalidad</li>
+            </ul>
+        </div>
+
+        <div class="intro-box">
+            <h3>🚀 Próximos Pasos</h3>
+            <p>Ahora puedes aplicar este mismo patrón a tus entidades <strong>Autor</strong>, <strong>Libro</strong> y <strong>Prestamo</strong>. Cada una tendrá su propio ViewModel, Servicio y Controlador delgado.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+@model BibliotecaApp.ViewModels.PaginacionViewModel<BibliotecaApp.ViewModels.LibroIndexViewModel>
+
+@{
+    ViewData["Title"] = "Libros";
+}
+
+<h1>Libros</h1>
+
+<form asp-action="Index" method="get" class="mb-3 d-flex gap-2 align-items-center">
+    <label class="fw-bold">Filtrar por estado:</label>
+    <select name="estado" class="form-select" style="max-width: 200px;">
+        <option value="">Todos</option>
+        <option value="Prestados" selected="@(ViewBag.Estado == "Prestados" ? "selected" : null)">Prestados</option>
+        <option value="Disponibles" selected="@(ViewBag.Estado == "Disponibles" ? "selected" : null)">Disponibles</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
+</form>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>ISBN</th>
+            <th>Año Publicación</th>
+            <th>Autor</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Items) {
+        <tr>
+            <td>@item.Titulo</td>
+            <td>@item.ISBN</td>
+            <td>@item.AnioPublicacion</td>
+            <td>@item.NombreAutor</td>
+            <td>
+                @if (item.Estado == "Disponible")
+                {
+                    <span class="badge bg-success">@item.Estado</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">@item.Estado</span>
+                }
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalles</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        Mostrando página @Model.PaginaActual de @Model.TotalPaginas (Total de elementos: @Model.TotalElementos)
+    </div>
+    <div>
+        <a asp-action="Index" 
+           asp-route-estado="@ViewBag.Estado" 
+           asp-route-pagina="@(Model.PaginaActual - 1)" 
+           class="btn btn-outline-primary @(!Model.TienePaginaAnterior ? "disabled" : "")">
+            Anterior
+        </a>
+        <a asp-action="Index" 
+           asp-route-estado="@ViewBag.Estado" 
+           asp-route-pagina="@(Model.PaginaActual + 1)" 
+           class="btn btn-outline-primary @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+            Siguiente
+        </a>
+    </div>
+</div>

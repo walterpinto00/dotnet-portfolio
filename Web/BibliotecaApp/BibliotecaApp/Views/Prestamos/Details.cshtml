@@ -1,0 +1,31 @@
+@model BibliotecaApp.ViewModels.PrestamoDetalleViewModel
+
+@{
+    ViewData["Title"] = "Detalles del Préstamo";
+}
+
+<h1>Detalles del Préstamo</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NombreUsuario)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.NombreUsuario)</dd>
+        
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FechaPrestamo)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaPrestamo)</dd>
+        
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FechaDevolucion)</dt>
+        <dd class="col-sm-9">@(Model.FechaDevolucion.HasValue ? Model.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "Pendiente")</dd>
+        
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TituloLibro)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TituloLibro)</dd>
+        
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AutorLibro)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.AutorLibro)</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>

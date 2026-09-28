@@ -1,0 +1,58 @@
+@model IEnumerable<BibliotecaApp.ViewModels.PrestamoIndexViewModel>
+
+@{
+    ViewData["Title"] = "Préstamos";
+}
+
+<h1>Préstamos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.NombreUsuario)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaPrestamo)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaDevolucion)</th>
+            <th>@Html.DisplayNameFor(model => model.TituloLibro)</th>
+            <th>@Html.DisplayNameFor(model => model.AutorLibro)</th>
+            <th>@Html.DisplayNameFor(model => model.DiasPrestado)</th>
+            <th>@Html.DisplayNameFor(model => model.EstadoLibro)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.NombreUsuario</td>
+            <td>@item.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+            <td>@(item.FechaDevolucion.HasValue ? item.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "Pendiente")</td>
+            <td>@item.TituloLibro</td>
+            <td>@item.AutorLibro</td>
+            <td>@item.DiasPrestado</td>
+            <td>
+                @if (item.EstadoLibro == "Devuelto")
+                {
+                    <span class="badge bg-success">@item.EstadoLibro</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">@item.EstadoLibro</span>
+                }
+            </td>
+            <td class="d-flex gap-1">
+                @if (!item.FechaDevolucion.HasValue)
+                {
+                    <form asp-action="Devolver" asp-route-id="@item.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-success">Devolver</button>
+                    </form>
+                }
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalles</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
