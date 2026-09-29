@@ -1,0 +1,29 @@
+    @model ProyectoUser.Models.ViewModels.EmpleadoViewModel
+
+@{
+    ViewData["Title"] = "Detalles del Empleado";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NombreCompleto)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.NombreCompleto)</dd>
+            
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+            
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FechaContratacion)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaContratacion)</dd>
+            
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Salario)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Salario)</dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+    </div>
+</div>

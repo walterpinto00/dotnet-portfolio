@@ -1,0 +1,32 @@
+@model ProyectoUser.Models.ViewModels.EmpleadoViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Empleado";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <h3 class="text-danger">¿Estás seguro de que deseas eliminar este empleado?</h3>
+    <hr />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NombreCompleto)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.NombreCompleto)</dd>
+            
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+            
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FechaContratacion)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaContratacion)</dd>
+            
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Salario)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Salario)</dd>
+        </dl>
+        
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+        </form>
+    </div>
+</div>
