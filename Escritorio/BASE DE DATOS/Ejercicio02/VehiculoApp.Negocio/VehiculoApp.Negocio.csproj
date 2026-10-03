@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Library</OutputType><TargetFramework>net8.0-windows</TargetFramework></PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\VehiculoApp.Datos\VehiculoApp.Datos.csproj" /></ItemGroup>
+</Project>
