@@ -1,0 +1,36 @@
+@model List<AplicacionRolesInventario.Models.Producto>
+@{ ViewData["Title"] = "Inventario de Productos"; }
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h2">Inventario de Productos</h1>
+        @if (Context.Session.GetString("Rol") == "Admin")
+        {
+            <a asp-action="Crear" class="btn btn-success">+ Agregar Producto</a>
+        }
+        <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger">Cerrar Sesion</a>
+    </div>
+    <p>Bienvenido: <strong>@Context.Session.GetString("Usuario")</strong> | Rol: <strong>@Context.Session.GetString("Rol")</strong></p>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr><th>Nombre</th><th>Categoria</th><th>Stock</th><th>Precio</th><th>Estado</th>
+            @if (Context.Session.GetString("Rol") == "Admin") { <th>Acciones</th> }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Nombre</td><td>@p.Categoria</td>
+                    <td><span class="badge @(p.Stock > 0 ? "bg-success" : "bg-danger")">@p.Stock</span></td>
+                    <td>@p.Precio.ToString("C")</td><td>@p.Estado</td>
+                    @if (Context.Session.GetString("Rol") == "Admin")
+                    {
+                        <td><a asp-action="Eliminar" asp-route-id="@p.Id" class="btn btn-sm btn-danger" onclick="return confirm('Eliminar?')">Eliminar</a></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

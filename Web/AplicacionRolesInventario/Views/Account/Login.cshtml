@@ -1,0 +1,23 @@
+@model AplicacionRolesInventario.Models.LoginViewModel
+@{ ViewData["Title"] = "Iniciar Sesion"; }
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Roles - Inventario</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label asp-for="Usuario" class="form-label"></label>
+                    <input asp-for="Usuario" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Contrasena" class="form-label"></label>
+                    <input asp-for="Contrasena" class="form-control" />
+                    <span asp-validation-for="Contrasena" class="text-danger"></span>
+                </div>
+                <div class="alert alert-info small p-2">Admin: admin / admin123 | Usuario: usuario / user123</div>
+                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</div>
