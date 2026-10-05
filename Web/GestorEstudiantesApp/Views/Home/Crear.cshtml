@@ -1,0 +1,31 @@
+@model GestorEstudiantesApp.Models.Estudiante
+@{ ViewData["Title"] = "Crear Estudiante"; }
+
+<div class="container mt-4">
+    <h2>Crear Nuevo Estudiante</h2>
+    <form asp-action="Crear" method="post">
+        <div class="mb-3">
+            <label asp-for="Nombre" class="form-label"></label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Programa" class="form-label"></label>
+            <input asp-for="Programa" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Promedio" class="form-label"></label>
+            <input asp-for="Promedio" class="form-control" type="number" step="0.1" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Estado" class="form-label"></label>
+            <select asp-for="Estado" class="form-select">
+                <option>Activo</option>
+                <option>Inactivo</option>
+                <option>Graduado</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

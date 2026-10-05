@@ -1,0 +1,38 @@
+@model List<GestorEstudiantesApp.Models.Estudiante>
+@{ ViewData["Title"] = "Gestión de Estudiantes"; }
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h2"><i class="bi bi-people-fill"></i> Gestión de Estudiantes</h1>
+        <a asp-action="Crear" class="btn btn-primary">+ Nuevo Estudiante</a>
+    </div>
+
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Programa</th>
+                <th>Promedio</th>
+                <th>Estado</th>
+                <th>Fecha Ingreso</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.Nombre</td>
+                    <td>@e.Programa</td>
+                    <td><span class="badge @(e.Promedio >= 7 ? "bg-success" : "bg-danger")">@e.Promedio</span></td>
+                    <td>@e.Estado</td>
+                    <td>@e.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <a asp-action="Editar" asp-route-id="@e.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Eliminar" asp-route-id="@e.Id" class="btn btn-sm btn-danger" onclick="return confirm('Eliminar?')">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
